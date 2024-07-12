@@ -4,7 +4,6 @@ MAXBYTES = 1024
 def handle_connection(conn):
     conn.recv(MAXBYTES) #specifying max amount of bytes
     response = "HTTP/1.1 200 OK\r\n\r\n"
-
     conn.send(response.encode()) #.encode converts string into bytes
 
 
