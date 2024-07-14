@@ -2,8 +2,12 @@ import socket
 
 MAXBYTES = 1024
 def handle_connection(conn):
-    conn.recv(MAXBYTES)  # specifying max amount of bytes
+    data = conn.recv(MAXBYTES)  # specifying max amount of bytes
+
     response = "HTTP/1.1 200 OK\r\n\r\n"
+    if "http://localhost:4221" not in data:
+        response = "HTTP/1.1 404 Not Found\r\n\r\n"
+
     conn.send(response.encode())  # .encode converts string into bytes
     conn.close()
 
