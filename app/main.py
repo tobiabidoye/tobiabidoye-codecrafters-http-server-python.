@@ -4,8 +4,10 @@ MAXBYTES = 1024
 def handle_connection(conn):
     data = conn.recv(MAXBYTES)  # specifying max amount of bytes
 
+    request, headers = data.split("\r\n")  # splitting by \r\n to extract url path
+
     response = "HTTP/1.1 200 OK\r\n\r\n"
-    if "http://localhost:4221" not in data:
+    if "http://localhost:4221/" in headers:
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
     conn.send(response.encode())  # .encode converts string into bytes
