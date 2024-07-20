@@ -10,7 +10,7 @@ def handle_connection(conn):
     response = "HTTP/1.1 200 OK\r\n\r\n"
     if "echo" in path:
         toSend = path[6:]
-        contentType = headers_list[0]
+        contentType = "Content-Type: text/plain\r\n"
         contentLen = len(toSend)
         response = response + contentType + toSend + "Content-Length:" + str(contentLen) + "\r\n"
     else:
