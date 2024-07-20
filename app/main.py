@@ -9,6 +9,7 @@ def handle_connection(conn):
     headers_list = headers.split("\r\n")
     response = "HTTP/1.1 200 OK\r\n\r\n"
     if "echo" in path:
+        response = "HTTP/1.1 200 OK\r\n"
         toSend = path[6:]
         contentType = "Content-Type: text/plain\r\n"
         contentLen = len(toSend)
