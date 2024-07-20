@@ -1,4 +1,5 @@
 import socket
+import threading
 
 MAXBYTES = 1024
 def handle_connection(conn):
@@ -15,6 +16,7 @@ def handle_connection(conn):
         contentType = "Content-Type: text/plain\r\n"
         contentLen = len(toSend)
         response = response + contentType + "Content-Length: " + str(contentLen) + "\r\n\r\n" + toSend
+
     elif "user-agent" in path:
         response = "HTTP/1.1 200 OK\r\n"
         agent, agentname = headers_list[1].split()
@@ -39,7 +41,8 @@ def main():
         print("Waiting for a connection...")
         conn, addr = server_socket.accept()  # this gives us the client details
         print(f"connection from:{addr} has been established")
-        handle_connection(conn)
+        thread = threading.Thread(target=handle_connection, args=(conn,))  # to support multithreading
+        thread.start()
 
 
 
