@@ -13,7 +13,7 @@ def handle_connection(conn):
         toSend = path[6:]
         contentType = "Content-Type: text/plain\r\n"
         contentLen = len(toSend)
-        response = response + contentType + toSend + "Content-Length:" + str(contentLen) + "\r\n"
+        response = response + contentType + "Content-Length: " + str(contentLen) + "\r\n\r\n" + toSend
     else:
         if path is not "/":
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
