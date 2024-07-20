@@ -7,11 +7,15 @@ def handle_connection(conn):
     request_line, headers = data.decode().split("\r\n", 1)  # decoding data as it comes in bytes
     method, path, http_version = request_line.split()
     headers_list = headers.split("\r\n")
-
-
     response = "HTTP/1.1 200 OK\r\n\r\n"
-    if path is not "/":
-        response = "HTTP/1.1 404 Not Found\r\n\r\n"
+    if "echo" in path:
+        toSend = path[6:]
+        contentType = "text/plain\r\n"
+        contentLen = len(toSend)
+        response = response + contentType + contentLen + "\r\n"
+    else:
+        if path is not "/":
+            response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
     conn.send(response.encode())  # .encode converts string into bytes
     conn.close()
