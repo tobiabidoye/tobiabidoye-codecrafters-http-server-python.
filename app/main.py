@@ -8,12 +8,20 @@ def handle_connection(conn):
     method, path, http_version = request_line.split()
     headers_list = headers.split("\r\n")
     response = "HTTP/1.1 200 OK\r\n\r\n"
+
     if "echo" in path:
         response = "HTTP/1.1 200 OK\r\n"
         toSend = path[6:]
         contentType = "Content-Type: text/plain\r\n"
         contentLen = len(toSend)
         response = response + contentType + "Content-Length: " + str(contentLen) + "\r\n\r\n" + toSend
+    elif "user-agent" in path:
+        response = "HTTP/1.1 200 OK\r\n"
+        agent, agentname = headers_list[1].split()
+        contentType = "Content-Type: text/plain\r\n"
+        contentLen = len(agentname)
+        response = response + contentType + "Content-Length: " + str(contentLen) + "\r\n\r\n" + agentname
+
     else:
         if path is not "/":
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
