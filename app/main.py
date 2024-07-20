@@ -25,7 +25,7 @@ def handle_connection(conn):
         response = response + contentType + "Content-Length: " + str(contentLen) + "\r\n\r\n" + agentname
 
     else:
-        if path is not "/":
+        if path != "/":
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
     conn.send(response.encode())  # .encode converts string into bytes
