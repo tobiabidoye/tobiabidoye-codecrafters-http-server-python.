@@ -35,7 +35,7 @@ def handle_connection(conn):
         filename = path[7:] #this is where filename is contained
         filepath = os.path.join(dirpath, filename)
         if os.path.exists(filepath) and os.path.isfile(filepath):
-            
+
             with open(filepath, 'rb') as file: 
                 #open file in binary mode and read it
                 content = file.read()
@@ -49,7 +49,30 @@ def handle_connection(conn):
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
             conn.send(response.encode())
         return
-
+    elif method == 'POST':
+        #something
+        headers_dict = dict(line.split(": ", 1) for line in headers_list if ": " in line) #forming a dictionary from headers_list
+        content_length = int(headers_dict.get("Content-Length",0))
+        content_type = headers_dict.get("Content-Type", "")
+        if content_type != "application/octet-stream":
+            #validating content type
+            response = "HTTP/1.1 415 Unsupported Media Type\r\n\r\n"
+            conn.send(response.encode())
+            return 
+        body = conn.recv(content_length)
+        filename = path[7:]
+        filepath = os.path.join(dirpath, filename)
+        try: 
+            #writing body to file
+            with open(filepath, 'wb') as file:
+                file.write(body)
+            response = "HTTP/1.1 201 Created\r\n\r\n"
+        except Exception as e:
+            response = "HTTP/1.1 500 Internal Server Error\r\n\r\n"
+        
+        conn.send(response.encode())
+        conn.close()
+              
     else:
 
         if path != "/":
